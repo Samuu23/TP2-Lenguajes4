@@ -2,6 +2,7 @@ import { useState } from "react";
 import "../Styles.css";
 
 function Formulario() {
+  const FORMSPREE_ENDPOINT = "https://formspree.io/f/xnngnwdz";
   const [formulario, setFormulario] = useState({
     nombre: "",
     correo: "",
@@ -16,10 +17,14 @@ function Formulario() {
     e.preventDefault();
     setEstado("Enviando...");
     try {
-      const res = await fetch("http://localhost:3001/api/contacto", {
+      const res = await fetch(FORMSPREE_ENDPOINT, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formulario),
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({
+          name: formulario.nombre,
+          email: formulario.correo,
+          message: formulario.mensaje
+        }),
       });
       if (!res.ok) throw new Error("Error");
       setEstado("Mensaje enviado");
